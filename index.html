@@ -36,7 +36,6 @@
         function calculateEarnings() {
             const sessionCost = parseFloat(document.getElementById('sessionCost').value);
             let sessionsPerDay = parseFloat(document.getElementById('sessionsPerDay').value);
-            const emptyFee = parseFloat(document.getElementById('emptyFee').value);
             const needleCost = parseFloat(document.getElementById('needleCost').value);
             const workingDaysPerWeek = parseFloat(document.getElementById('workingDaysPerWeek').value);
             const vacationWeeks = parseFloat(document.getElementById('vacationWeeks').value);
@@ -61,7 +60,7 @@
             const dailyCommission = dailyRevenue * commissionRate;
             const dailyEarningsAfterCommission = dailyRevenue - dailyCommission;
 
-            const totalDailyExpenses = emptyFee + needleCost;
+            const totalDailyExpenses = needleCost; // Remove empty fee from total expenses
             const dailyEarningsAfterExpenses = dailyEarningsAfterCommission - totalDailyExpenses;
 
             const annualEarnings = dailyEarningsAfterExpenses * totalWorkdays;
@@ -73,6 +72,9 @@
 
             // Update UI with calculated capacity percentage
             document.getElementById('capacityPercentage').innerText = `Capacity: ${capacity.toFixed(2)}%`;
+
+            // Update UI with calculated commission rate
+            document.getElementById('commissionRate').innerText = `Commission Rate: ${commissionRate * 100}%`;
 
             // Update UI with calculated monthly earnings after tax
             document.getElementById('result').innerText = `Monthly Earnings After Tax: €${monthlyEarningsAfterTax.toFixed(2)}`;
@@ -88,6 +90,18 @@
         window.onload = function() {
             calculateEarnings();
         };
+
+        // Function to update capacity percentage and commission rate labels dynamically
+        function updateLabels() {
+            const sessionsPerDay = parseFloat(document.getElementById('sessionsPerDay').value);
+            const capacity = (sessionsPerDay / 7) * 100;
+            const commissionRate = calculateCommission(capacity);
+
+            document.getElementById('capacityPercentage').innerText = `Capacity: ${capacity.toFixed(2)}%`;
+            document.getElementById('commissionRate').innerText = `Commission Rate: ${commissionRate * 100}%`;
+
+            calculateEarnings(); // Recalculate earnings when sessions per day changes
+        }
     </script>
 </head>
 <body>
@@ -97,11 +111,9 @@
         <input type="number" id="sessionCost" value="82.50" onchange="calculateEarnings()"><br><br>
 
         <label for="sessionsPerDay">Sessions per Day (Max 7):</label>
-        <input type="number" id="sessionsPerDay" value="7" min="1" max="7" onchange="calculateEarnings()"><br>
-        <label id="capacityPercentage"></label><br><br>
-
-        <label for="emptyFee">Empty Appointment Fee (€):</label>
-        <input type="number" id="emptyFee" value="10" onchange="calculateEarnings()"><br><br>
+        <input type="number" id="sessionsPerDay" value="7" min="1" max="7" onchange="updateLabels()"><br>
+        <label id="capacityPercentage"></label><br>
+        <label id="commissionRate"></label><br><br>
 
         <label for="needleCost">Needle Cost (€):</label>
         <input type="number" id="needleCost" value="7" onchange="calculateEarnings()"><br><br>
@@ -118,14 +130,5 @@
     <h2 id="result">Monthly Earnings After Tax: €0.00</h2>
     <label id="taxRateLabel"></label><br>
     <label id="sessionLossFeeLabel"></label>
-
-    <script>
-        // Function to update capacity percentage label dynamically
-        function updateCapacityLabel() {
-            const sessionsPerDay = parseFloat(document.getElementById('sessionsPerDay').value);
-            const capacity = (sessionsPerDay / 7) * 100;
-            document.getElementById('capacityPercentage').innerText = `Capacity: ${capacity.toFixed(2)}%`;
-        }
-    </script>
 </body>
 </html>
