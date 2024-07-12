@@ -1,0 +1,93 @@
+Certainly! We can automate the commission rate calculation based on the capacity ranges you provided earlier. Here's an updated version of the HTML form that calculates the commission rate based on the capacity:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monthly Earnings Calculator</title>
+    <script>
+        function calculateCommission(capacity) {
+            if (capacity <= 25) {
+                return 0.5;
+            } else if (capacity <= 50) {
+                return 0.475;
+            } else if (capacity <= 70) {
+                return 0.45;
+            } else if (capacity <= 80) {
+                return 0.425;
+            } else if (capacity <= 90) {
+                return 0.4;
+            } else if (capacity <= 95) {
+                return 0.375;
+            } else {
+                return 0.35;
+            }
+        }
+
+        function calculateEarnings() {
+            const sessionCost = parseFloat(document.getElementById('sessionCost').value);
+            const maxSessions = parseFloat(document.getElementById('maxSessions').value);
+            const capacity = parseFloat(document.getElementById('capacity').value);
+            const emptyFee = parseFloat(document.getElementById('emptyFee').value);
+            const needleCost = parseFloat(document.getElementById('needleCost').value);
+            const workingDaysPerWeek = parseFloat(document.getElementById('workingDaysPerWeek').value);
+            const vacationWeeks = parseFloat(document.getElementById('vacationWeeks').value);
+            const extraDaysOff = parseFloat(document.getElementById('extraDaysOff').value);
+            const taxRate = parseFloat(document.getElementById('taxRate').value) / 100;
+
+            const workingWeeks = 52 - vacationWeeks;
+            const totalWorkdays = (workingWeeks * workingDaysPerWeek) - extraDaysOff;
+
+            const commissionRate = calculateCommission(capacity);
+
+            const dailyRevenue = maxSessions * (capacity / 100) * sessionCost;
+            const dailyCommission = dailyRevenue * commissionRate;
+            const dailyEarningsAfterCommission = dailyRevenue - dailyCommission;
+
+            const totalDailyExpenses = emptyFee + needleCost;
+            const dailyEarningsAfterExpenses = dailyEarningsAfterCommission - totalDailyExpenses;
+
+            const annualEarnings = dailyEarningsAfterExpenses * totalWorkdays;
+            const annualEarningsAfterTax = annualEarnings * (1 - taxRate);
+
+            const monthlyEarningsAfterTax = annualEarningsAfterTax / 12;
+
+            document.getElementById('result').innerText = `Monthly Earnings After Tax: €${monthlyEarningsAfterTax.toFixed(2)}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Monthly Earnings Calculator</h1>
+    <form>
+        <label for="sessionCost">Average Session Cost (€):</label>
+        <input type="number" id="sessionCost" value="82.50"><br><br>
+
+        <label for="maxSessions">Max Sessions per Day:</label>
+        <input type="number" id="maxSessions" value="7"><br><br>
+
+        <label for="capacity">Capacity (%):</label>
+        <input type="number" id="capacity" value="90"><br><br>
+
+        <label for="emptyFee">Empty Appointment Fee (€):</label>
+        <input type="number" id="emptyFee" value="10"><br><br>
+
+        <label for="needleCost">Needle Cost (€):</label>
+        <input type="number" id="needleCost" value="7"><br><br>
+
+        <label for="workingDaysPerWeek">Working Days per Week:</label>
+        <input type="number" id="workingDaysPerWeek" value="4"><br><br>
+
+        <label for="vacationWeeks">Vacation Weeks per Year:</label>
+        <input type="number" id="vacationWeeks" value="5"><br><br>
+
+        <label for="extraDaysOff">Extra Days Off per Year:</label>
+        <input type="number" id="extraDaysOff" value="10"><br><br>
+
+        <label for="taxRate">Tax Rate (%):</label>
+        <input type="number" id="taxRate" value="29"><br><br>
+
+        <button type="button" onclick="calculateEarnings()">Calculate</button>
+    </form>
+    <h2 id="result">Monthly Earnings After Tax: €0.00</h2>
+</body>
+</html>
