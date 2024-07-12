@@ -35,7 +35,7 @@
 
         function calculateEarnings() {
             const sessionCost = parseFloat(document.getElementById('sessionCost').value);
-            const sessionsPerDay = parseFloat(document.getElementById('sessionsPerDay').value);
+            let sessionsPerDay = parseFloat(document.getElementById('sessionsPerDay').value);
             const emptyFee = parseFloat(document.getElementById('emptyFee').value);
             const needleCost = parseFloat(document.getElementById('needleCost').value);
             const workingDaysPerWeek = parseFloat(document.getElementById('workingDaysPerWeek').value);
@@ -44,6 +44,13 @@
 
             const workingWeeks = 52 - vacationWeeks;
             const totalWorkdays = (workingWeeks * workingDaysPerWeek) - extraDaysOff;
+
+            // Apply fee for sessions less than maximum
+            let sessionLossFee = 0;
+            if (sessionsPerDay < 7) {
+                sessionLossFee = (7 - sessionsPerDay) * 10; // Calculate fee
+                sessionsPerDay = 7; // Set sessions per day to 7 for revenue calculation
+            }
 
             // Calculate capacity percentage based on sessions per day
             let capacity = (sessionsPerDay / 7) * 100;
@@ -72,6 +79,9 @@
             
             // Update UI with tax rate
             document.getElementById('taxRateLabel').innerText = `Tax Rate: ${taxRate * 100}%`;
+
+            // Update UI with session loss fee
+            document.getElementById('sessionLossFeeLabel').innerText = `Session Loss Fee: €${sessionLossFee.toFixed(2)}`;
         }
 
         // Function to execute calculations on page load
@@ -106,7 +116,8 @@
         <input type="number" id="extraDaysOff" value="10" onchange="calculateEarnings()"><br><br>
     </form>
     <h2 id="result">Monthly Earnings After Tax: €0.00</h2>
-    <label id="taxRateLabel"></label>
+    <label id="taxRateLabel"></label><br>
+    <label id="sessionLossFeeLabel"></label>
 
     <script>
         // Function to update capacity percentage label dynamically
