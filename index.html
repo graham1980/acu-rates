@@ -73,6 +73,11 @@
             // Update UI with tax rate
             document.getElementById('taxRateLabel').innerText = `Tax Rate: ${taxRate * 100}%`;
         }
+
+        // Function to execute calculations on page load
+        window.onload = function() {
+            calculateEarnings();
+        };
     </script>
 </head>
 <body>
