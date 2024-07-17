@@ -27,8 +27,7 @@
             const needleCost = parseFloat(document.getElementById('needleCost').value);
             const workingDaysPerWeek = parseFloat(document.getElementById('workingDaysPerWeek').value);
 
-            const workingWeeks = 52;
-            const totalWorkdays = workingWeeks * workingDaysPerWeek;
+            const totalWorkdays = workingDaysPerWeek * 4;
 
             // Calculate capacity percentage based on sessions per day
             const capacity = (sessionsPerDay / 7) * 100;
@@ -42,8 +41,7 @@
             const totalDailyExpenses = needleCost; // Remove empty fee from total expenses
             const dailyEarningsAfterExpenses = dailyEarningsAfterCommission - totalDailyExpenses;
 
-            const annualEarnings = dailyEarningsAfterExpenses * totalWorkdays;
-            const monthlyEarnings = annualEarnings / 12;
+            const monthlyEarnings = dailyEarningsAfterExpenses * totalWorkdays;
 
             // Update UI with calculated capacity percentage
             document.getElementById('capacityPercentage').innerText = `Capacity: ${capacity.toFixed(2)}%`;
