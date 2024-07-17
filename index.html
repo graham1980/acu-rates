@@ -26,11 +26,9 @@
             const sessionsPerDay = parseFloat(document.getElementById('sessionsPerDay').value);
             const needleCost = parseFloat(document.getElementById('needleCost').value);
             const workingDaysPerWeek = parseFloat(document.getElementById('workingDaysPerWeek').value);
-            const vacationWeeks = parseFloat(document.getElementById('vacationWeeks').value);
-            const extraDaysOff = parseFloat(document.getElementById('extraDaysOff').value);
 
-            const workingWeeks = 52 - vacationWeeks;
-            const totalWorkdays = (workingWeeks * workingDaysPerWeek) - extraDaysOff;
+            const workingWeeks = 52;
+            const totalWorkdays = workingWeeks * workingDaysPerWeek;
 
             // Calculate capacity percentage based on sessions per day
             const capacity = (sessionsPerDay / 7) * 100;
@@ -77,12 +75,6 @@
 
         <label for="workingDaysPerWeek">Working Days per Week:</label>
         <input type="number" id="workingDaysPerWeek" value="4"><br><br>
-
-        <label for="vacationWeeks">Vacation Weeks per Year:</label>
-        <input type="number" id="vacationWeeks" value="5"><br><br>
-
-        <label for="extraDaysOff">Extra Days Off per Year:</label>
-        <input type="number" id="extraDaysOff" value="10"><br><br>
 
         <button type="button" onclick="calculateEarnings()">Calculate Earnings</button>
     </form>
