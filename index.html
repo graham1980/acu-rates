@@ -24,21 +24,24 @@
         function calculateEarnings() {
             const sessionCost = parseFloat(document.getElementById('sessionCost').value);
             const sessionsPerDay = parseFloat(document.getElementById('sessionsPerDay').value);
-            const needleCost = parseFloat(document.getElementById('needleCost').value);
+            const materialsCost = parseFloat(document.getElementById('materialsCost').value);
             const workingDaysPerWeek = parseFloat(document.getElementById('workingDaysPerWeek').value);
+            const emptySessionCost = 10;
+            const maxSessions = 7;
 
             const totalWorkdays = workingDaysPerWeek * 4;
 
             // Calculate capacity percentage based on sessions per day
-            const capacity = (sessionsPerDay / 7) * 100;
+            const capacity = (sessionsPerDay / maxSessions) * 100;
 
             const commissionRate = calculateCommission(capacity);
 
             const dailyRevenue = sessionsPerDay * sessionCost;
+            const emptySessionExpenses = (maxSessions - sessionsPerDay) * emptySessionCost;
             const dailyCommission = dailyRevenue * commissionRate;
             const dailyEarningsAfterCommission = dailyRevenue - dailyCommission;
 
-            const totalDailyExpenses = needleCost; // Remove empty fee from total expenses
+            const totalDailyExpenses = materialsCost + emptySessionExpenses;
             const dailyEarningsAfterExpenses = dailyEarningsAfterCommission - totalDailyExpenses;
 
             const monthlyEarnings = dailyEarningsAfterExpenses * totalWorkdays;
@@ -48,6 +51,9 @@
 
             // Update UI with calculated commission rate
             document.getElementById('commissionRate').innerText = `Commission Rate: ${commissionRate * 100}%`;
+
+            // Update UI with empty session cost
+            document.getElementById('emptySessionCostLabel').innerText = `Empty Session Cost: €${emptySessionExpenses.toFixed(2)}`;
 
             // Update UI with calculated monthly earnings
             document.getElementById('result').innerText = `Monthly Earnings (pre-tax): €${monthlyEarnings.toFixed(2)}`;
@@ -66,18 +72,19 @@
         <input type="number" id="sessionCost" value="82.50"><br><br>
 
         <label for="sessionsPerDay">Sessions per Day (Max 7):</label>
-        <input type="number" id="sessionsPerDay" value="7" min="1" max="7"><br><br>
+        <input type="number" id="sessionsPerDay" value="7" min="1" max="7" oninput="calculateEarnings()"><br><br>
 
-        <label for="needleCost">Needle Cost (€):</label>
-        <input type="number" id="needleCost" value="7"><br><br>
+        <label for="materialsCost">Materials Cost (per day) (€):</label>
+        <input type="number" id="materialsCost" value="7"><br><br>
 
         <label for="workingDaysPerWeek">Working Days per Week:</label>
-        <input type="number" id="workingDaysPerWeek" value="4"><br><br>
+        <input type="number" id="workingDaysPerWeek" value="3"><br><br>
 
         <button type="button" onclick="calculateEarnings()">Calculate Earnings</button>
     </form>
     <h2 id="result">Monthly Earnings (pre-tax): €0.00</h2>
     <label id="capacityPercentage"></label><br>
     <label id="commissionRate"></label><br>
+    <label id="emptySessionCostLabel"></label><br>
 </body>
 </html>
